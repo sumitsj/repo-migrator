@@ -1,0 +1,19 @@
+{
+  "name": "repo-migrator",
+  "version": "1.0.0",
+  "description": "To copy pull requests from one GitHub repository to another using JavaScript, you can utilize the GitHub API. Here's a simple Node.js script that will help you do this. This script will:",
+  "main": "./index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "repo-migrator": "./index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2"
+  }
+}
