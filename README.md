@@ -54,6 +54,25 @@ Make sure you have the necessary permissions:
     node .
     ```
 
+### Sample `.env` File
+
+For reference, here's a sample `.env` file based on the variables used:
+
+```env
+# Bitbucket Configuration
+BITBUCKET_USERNAME=johndoe
+BITBUCKET_APP_PASSWORD=bitbucket_app_password_here
+BITBUCKET_REPO=johndoe/my-bitbucket-repo
+
+# GitLab Configuration
+GITLAB_TOKEN=gitlab_access_token_here
+GITLAB_REPO_ID=654321
+
+# (Optional) Custom API URLs
+# BITBUCKET_API_URL=https://api.bitbucket.org/2.0
+# GITLAB_API_URL=https://gitlab.example.com/api/v4
+```
+
 
 ### Important Notes
 
