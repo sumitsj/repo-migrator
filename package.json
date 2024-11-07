@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "repo-migrator": "./index.js"
+    "migrate-br": "./index.js",
+    "migrate-pr": "./migrate-pr.js"
   },
   "author": "",
   "license": "ISC",

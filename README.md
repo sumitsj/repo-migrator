@@ -52,6 +52,8 @@ Make sure you have the necessary permissions:
 
     ```bash
     node .
+    // or
+    node ./migrate-pr.js
     ```
 
 ### Sample `.env` File
@@ -60,8 +62,7 @@ For reference, here's a sample `.env` file based on the variables used:
 
 ```env
 # Bitbucket Configuration
-BITBUCKET_USERNAME=johndoe
-BITBUCKET_APP_PASSWORD=bitbucket_app_password_here
+BITBUCKET_TOKEN=bitbucket_access_token_here
 BITBUCKET_REPO=johndoe/my-bitbucket-repo
 
 # GitLab Configuration
@@ -73,8 +74,23 @@ GITLAB_REPO_ID=654321
 # GITLAB_API_URL=https://gitlab.example.com/api/v4
 ```
 
+## Explanation of migrate-pr utility
 
-### Important Notes
+1. **`gitLabMergeRequestExists` Function**:
+   - This function checks if a merge request with the specified `source_branch` and `target_branch` already exists in GitLab.
+   - It queries the GitLab API with `state=all`, which includes all merge requests (open, closed, merged).
+   - If any matching merge requests are returned, the function returns `true`; otherwise, it returns `false`.
+
+2. **Conditional Check in `copyPullRequests`**:
+   - Before creating a merge request, `copyPullRequests` calls `gitLabMergeRequestExists`.
+   - If a merge request with the same branches already exists, it logs a message and skips the creation step.
+
+3. **Output**:
+   - The script logs whether each pull request is being created or skipped due to an existing merge request in GitLab.
+
+This approach prevents duplicate merge requests in GitLab, ensuring only new, unique pull requests are copied from Bitbucket.
+
+## Important Notes
 
 - **Branch Creation**: If the branch already exists in GitLab, it logs and skips creation to avoid errors.
 - **Source and Target Branches in Pull Requests**: Ensure the branches in pull requests are valid and match in both repositories for a smooth transfer.

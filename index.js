@@ -5,12 +5,11 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env file
 
-console.log( "Started..." );
+console.log( "Running Branch & PR migration..." );
 
 // Configuration variables from environment variables
 const {
-  BITBUCKET_USERNAME,
-  BITBUCKET_APP_PASSWORD,
+  BITBUCKET_TOKEN,
   GITLAB_TOKEN,
   BITBUCKET_REPO,
   GITLAB_REPO_ID,
@@ -18,11 +17,29 @@ const {
   GITLAB_API_URL = 'https://gitlab.com/api/v4'
 } = process.env;
 
+// Helper function to print all environment variables with proper formatting
+function printEnvVariables() {
+  console.log('\n--- Environment Variables ---');
+  const envs = [
+      'BITBUCKET_TOKEN',
+      'GITLAB_TOKEN',
+      'BITBUCKET_REPO',
+      'GITLAB_REPO_ID',
+      'BITBUCKET_API_URL',
+      'GITLAB_API_URL'
+  ];
+
+  envs.forEach((key) => {
+      console.log(`${key}: ${process.env[key]}`);
+  });
+
+  console.log('-----------------------------\n');
+}
+
 // Validate required environment variables
 function validateEnvVariables() {
   const requiredVars = [
-    'BITBUCKET_USERNAME',
-    'BITBUCKET_APP_PASSWORD',
+    'BITBUCKET_TOKEN',
     'GITLAB_TOKEN',
     'BITBUCKET_REPO',
     'GITLAB_REPO_ID'
@@ -41,9 +58,7 @@ function validateEnvVariables() {
 async function fetchBitbucketBranches() {
   const response = await fetch(`${BITBUCKET_API_URL}/repositories/${BITBUCKET_REPO}/refs/branches`, {
     headers: {
-      Authorization:
-        'Basic ' +
-        Buffer.from(`${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}`).toString('base64')
+      Authorization: `Bearer ${BITBUCKET_TOKEN}`
     }
   });
 
@@ -61,9 +76,7 @@ async function fetchAllBitbucketBranches() {
   while (url) {
     const response = await fetch(url, {
       headers: {
-        Authorization:
-          'Basic ' +
-          Buffer.from(`${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}`).toString('base64')
+        Authorization: `Bearer ${BITBUCKET_TOKEN}`
       }
     });
 
@@ -112,9 +125,7 @@ async function createGitLabBranch(branchName, branchTarget) {
 async function fetchBitbucketPullRequests() {
   const response = await fetch(`${BITBUCKET_API_URL}/repositories/${BITBUCKET_REPO}/pullrequests`, {
     headers: {
-      Authorization:
-        'Basic ' +
-        Buffer.from(`${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}`).toString('base64')
+      Authorization: `Bearer ${BITBUCKET_TOKEN}`
     }
   });
 
@@ -181,8 +192,6 @@ async function copyBranchesAndPullRequests() {
   }
 }
 
+printEnvVariables();
 // Run the script
 copyBranchesAndPullRequests();
-
-
-console.log( "Ended..." );
