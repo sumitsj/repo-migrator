@@ -54,6 +54,32 @@ async function fetchBitbucketBranches() {
   return response.json();
 }
 
+async function fetchAllBitbucketBranches() {
+  let branches = [];
+  let url = `${BITBUCKET_API_URL}/repositories/${BITBUCKET_REPO}/refs/branches`;
+
+  while (url) {
+    const response = await fetch(url, {
+      headers: {
+        Authorization:
+          'Basic ' +
+          Buffer.from(`${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}`).toString('base64')
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error fetching Bitbucket branches: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    branches = branches.concat(data.values);
+
+    url = data.next || null;
+  }
+
+  return branches;
+}
+
 // Helper function to create a branch in GitLab
 async function createGitLabBranch(branchName, branchTarget) {
   const requestBody = {
